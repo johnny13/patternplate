@@ -28,12 +28,12 @@ We will …
 
 ## You'll need
 
-* :white_check_mark: You are all set if you followed along [Guide: Build a component](./doc/docs/guides/add-component?guides-enabled=true)
+* :white_check_mark: You are all set if you followed along [Guide: Build a component](../guides/add-component?guides-enabled=true)
 
 ---
 
 * :writing_hand: Text editor
-* :file_folder: patternplate project ([Getting Started Guide](./doc/docs/guides/getting-started?guides-enabled=true))
+* :file_folder: patternplate project ([Getting Started Guide](../guides/getting-started?guides-enabled=true))
 
 ## Before you start
 
@@ -49,7 +49,7 @@ We will …
 of your component librarie's interface
 
   ```bash
-  yarn patternplate build --out=docs/patterns --base=/patterns/
+  yarn patternplate build --out='docs/patterns' --base='/patterns/'
   ```
 
   ![](https://patternplate.github.io/media/casts/cast-build.svg)
@@ -99,7 +99,8 @@ npx serve docs/ --open
 
 ## Deploy to GitHub Pages
 
-> :information_source: You may have noticed from our run of `npx serve`: `patternplate build` creates a document root suitable for deployment on any static webserver. This means there is nothing barring you from hosting it from your own systems.
+> :information_source: 
+> You may have noticed from our run of `npx serve`: `patternplate build` creates a document root suitable for deployment on any static webserver. This means there is nothing barring you from hosting it from your own systems.
 
 Replace `[username]` with your GitHub username in all commands of this section.
 
@@ -132,7 +133,7 @@ scroll down to the **GitHub Pages** section.
 5. Click on the dropdown under **Source** and select `master branch docs folder`. Make sure
 to hit the save button next to the dropdown.
 
-6. Navigate your browser to `https://[username].github.com/my-patternplate`. You should the very same interface you create locally earlier. 
+6. Navigate your browser to `https://[username].github.com/my-patternplate/`. You should see the very same interface you created locally earlier. 
 
 ![](https://patternplate.github.io/media/images/screenshot-hello-world.svg)
 
@@ -145,5 +146,5 @@ to hit the save button next to the dropdown.
 
 ## Related topics
 
-* [CLI](./doc/docs/reference/cli?reference-enabled=true)
+* [CLI](../reference/cli?reference-enabled=true)
 

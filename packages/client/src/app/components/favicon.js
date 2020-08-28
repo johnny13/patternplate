@@ -5,12 +5,13 @@ import {
   styled,
   themes,
   Symbol,
-  IconDefinitions
+  IconDefinitions,
+  svg
 } from "@patternplate/components";
-import * as svg from "../utils/svg";
+
 import platform from "platform";
 
-const THEMES = themes();
+const THEMES = themes.getThemes();
 
 const SVG_FAVICON_SUPPORT = ["Firefox"];
 
@@ -75,13 +76,15 @@ class FavIcon extends React.Component {
   }
 }
 
-export default styled(FavIcon)`
+const StyledFavicon = styled(FavIcon)`
   width: 100%;
   height: auto;
-  stroke: ${props => props.theme.color};
+  stroke: ${props => props.theme.colors.color};
   stroke-width: 0;
-  fill: ${props => props.theme.color};
+  fill: ${props => props.theme.colors.color};
 `;
+
+export default props => <StyledFavicon {...props}/>;
 
 function getSource(props) {
   if (!props.source) {

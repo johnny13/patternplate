@@ -1,10 +1,14 @@
 {
-  "name": "@patternplate-example/webpack-react-less",
-  "version": "2.0.0-93",
+  "name": "@patternplate/example-webpack-react-less",
+  "version": "3.2.7",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"yarn webpack -w\" \"patternplate\""
+    "start": "concurrently \"yarn webpack -w\" \"patternplate\"",
+    "build": "webpack",
+    "pp:build": "patternplate build --out .tmp --base '/'",
+    "pp:test": "patternplate-test --project . --no-build --port=1442",
+    "pp:deploy": "patternplate-deploy --source .tmp --name=\"patternplate-example-webpack-react-less\" --provider=surge"
   },
   "author": {
     "name": "Mario Nebl",
@@ -19,12 +23,13 @@
     "@babel/core": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.40",
     "@babel/preset-react": "^7.0.0-beta.40",
-    "@patternplate/cli": "^2.0.0-93",
-    "@patternplate/render-react": "^2.0.0-93",
-    "@patternplate/webpack-entry": "^2.0.0-93",
+    "@patternplate/cli": "^3.2.7",
+    "@patternplate/render-react": "^3.2.5",
+    "@patternplate/webpack-entry": "^3.1.1",
     "babel-loader": "8.0.0-beta.0",
     "concurrently": "^3.5.1",
     "css-loader": "^0.28.7",
+    "dependency-check": "^3.1.0",
     "dev-loader": "^0.1.0",
     "globby": "^6.1.0",
     "less": "^2.7.3",
@@ -33,6 +38,6 @@
     "webpack": "^3.8.1"
   },
   "dependencies": {
-    "react": "^16.0.0"
+    "react": "16.6.3"
   }
 }

@@ -1,14 +1,13 @@
 const path = require("path");
 
-const api = require("@patternplate/api");
-const loadConfig = require("@patternplate/load-config");
+const { api } = require("@patternplate/api");
 const { loadDocsTree } = require("@patternplate/load-docs");
-const loadMeta = require("@patternplate/load-meta");
+const { loadMeta } = require("@patternplate/load-meta");
 const express = require("express");
 const serve = require("serve-static");
 const fetch = require("isomorphic-fetch");
-
-const renderPage = require("./app/render-page");
+const cors = require("cors");
+const render = require("./render");
 
 module.exports = client;
 
@@ -16,7 +15,8 @@ async function client(options) {
   const apiRoute = await api({
     cwd: options.cwd,
     config: options.config,
-    server: options.server
+    server: options.server,
+    inspect: options.inspect
   });
 
   const mainRoute = await main({
@@ -27,75 +27,54 @@ async function client(options) {
   const apiStatic = path.join(options.cwd, "static");
 
   const app = express()
-    .use("/api/static", serve(apiStatic))
-    .use("/api/", apiRoute)
+    .use("/api/static", cors(), serve(apiStatic))
+    .use("/api/", apiRoute.middleware)
     .get("/pattern/*", mainRoute)
     .get("/doc/*", mainRoute)
     .get("/", mainRoute);
 
-  if (process.env.BUNDLE === "@patternplate/cli") {
-    // bundled via @patternplate/cli
-    const efs = require("./eject")();
-
-    app.use("/static", (req, res, next) => {
-      switch (req.url) {
-        case "/vendors.js": {
-          res.type("js");
-          return res.send(efs.readFileSync("/static/vendors.js"));
-        }
-        case "/client.js": {
-          res.type("js");
-          return res.send(efs.readFileSync("/static/client.js"));
-        }
-        default:
-          next();
-      }
-    });
-  } else {
-    // regular node environment
-    const appStatic = path.join(__dirname, "static");
-    app.use("/static", serve(appStatic));
-  }
+  const appStatic = path.join(__dirname, "static");
+  app.use("/static", serve(appStatic));
 
   app.subscribe = apiRoute.subscribe;
+  app.unsubscribe = apiRoute.unsubscribe;
+
   return app;
 }
 
 async function main(options) {
   return async function mainRoute(req, res, next) {
     try {
-      const result = (await loadConfig({ cwd: options.cwd })) || {};
-      const { config = {}, filepath } = result;
-      const { entry = [], cover } = config;
-      const cwd = filepath ? path.dirname(filepath) : process.cwd();
+      const { entry = [], cover } = options.config;
       const base = options.base || "/";
 
       if (req.path === base && typeof cover === "string") {
-        const response = await fetch(`${req.protocol}://${req.get("host")}/api/cover.html?base=${base}`);
+        const response = await fetch(`${req.protocol}://${req.get("host")}/api/cover.html?base=${base}`, {credentials: "include"});
         return res.send(await response.text());
       }
 
-      const docs = await loadDocsTree({
-        cwd,
-        docs: config.docs,
-        readme: config.readme
-      });
-
-      // TODO: Send errors to central observer
-      const {patterns} = await loadMeta({
-        cwd,
-        entry
-      });
+      const [docs, {patterns}] = await Promise.all([
+        loadDocsTree({
+          cwd: options.cwd,
+          docs: options.config.docs,
+          readme: options.config.readme
+        }),
+        loadMeta({
+          cwd: options.cwd,
+          entry
+        })
+      ]);
 
       const tree = {id: "root", children: patterns};
 
-      res.send(
-        await renderPage(req.url, {
-          schema: { meta: tree, docs },
-          config,
-          base
-        })
-      );
+      const rendering = await render(req.url, {
+        schema: { meta: tree, docs },
+        config: options.config,
+        base,
+      });
+
+      res.status(rendering.status);
+      res.send(rendering.contents);
     } catch (err) {
       next(err);
     }

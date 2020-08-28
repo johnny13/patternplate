@@ -1,6 +1,7 @@
 import activeBlock from "./active-block";
 import activeNode from "./active-node";
 import base from "./base";
+import config from "./config";
 import codeEnabled from "./code-enabled";
 import connection from "./connection";
 import depth from "./depth";
@@ -32,26 +33,18 @@ const ident = state => state || {};
 const getDependencies = (reducer = {}) => reducer.dependencies || [];
 
 export default {
-  activeBlock,
-  activeNode,
   base,
-  codeEnabled,
-  config: ident,
+  config,
   connection,
   demo,
-  dependenciesEnabled,
-  dependentsEnabled,
   depth,
-  docEnabled,
   fetching,
   hideEnabled,
   id,
   isStatic,
-  infoEnabled,
-  manifestEnabled,
+  manifest: ident,
   messages,
   navigationEnabled,
-  networkEnabled,
   opacity,
   componentsEnabled,
   schema,
@@ -61,6 +54,7 @@ export default {
   searchValue,
   shortcuts,
   startBase: ident,
+  staticBase: ident,
   theme,
   window
 };

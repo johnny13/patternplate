@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "declarationMap": true,
+    "rootDir": "src",
+    "module": "commonjs",
+    "target": "es2015",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es2015"]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/test.ts"
+  ]
+}

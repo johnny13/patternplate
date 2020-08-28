@@ -1,0 +1,42 @@
+{
+  "name": "@patternplate/validate-manifest",
+  "version": "3.1.1",
+  "description": "Validate schema for pattern.json",
+  "scripts": {
+    "deps": "dependency-check . --missing && dependency-check . --extra --no-dev",
+    "test": "jest"
+  },
+  "typings": "lib/index.d.ts",
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "lib"
+  ],
+  "xo": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patternplate/patternplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/patternplate/patternplate/issues"
+  },
+  "homepage": "https://github.com/patternplate/patternplate#readme",
+  "author": {
+    "name": "Mario Nebl",
+    "email": "mario.nebl@sinnerschrader.com"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@patternplate/types": "^3.1.1",
+    "@types/node": "^10.9.4",
+    "cross-env": "^5.2.0",
+    "dependency-check": "^3.1.0"
+  },
+  "dependencies": {
+    "schema-utils": "^1.0.0"
+  },
+  "gitHead": "54025e88c20a22803fc196ba7f50e74f5c90cd57"
+}

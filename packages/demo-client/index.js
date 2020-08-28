@@ -1,5 +1,7 @@
 /* eslint-env browser */
 /* eslint-disable no-var */
+require("iframe-resizer");
+
 function main() {
   var components = window['patternplate-components'];
   var errors = [];
@@ -7,7 +9,10 @@ function main() {
     errors.push(new Error('No patternplate components found. There might be errors during bundling.'))
   }
   if (errors.length > 0) {
-    errors.forEach(err => console.error(err));
+    errors.forEach(function (err) {
+      console.error(err)
+    });
+
     return;
   }
 

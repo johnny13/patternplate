@@ -1,0 +1,41 @@
+{
+  "name": "@patternplate/deploy-site",
+  "version": "3.2.5",
+  "description": "patternplate static site deployment",
+  "scripts": {
+    "deps": "dependency-check . --missing && dependency-check . --extra --no-dev"
+  },
+  "files": [
+    "deploy.js"
+  ],
+  "bin": {
+    "patternplate-deploy": "./deploy.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patternplate/patternplate.git"
+  },
+  "author": {
+    "name": "Mario Nebl",
+    "email": "mario.nebl@sinnerschrader.com"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">= 4",
+    "npm": ">= 3"
+  },
+  "xo": false,
+  "dependencies": {
+    "@marionebl/sander": "^0.6.1",
+    "execa": "^0.9.0",
+    "meow": "^4.0.0",
+    "surge": "^0.20.3"
+  },
+  "devDependencies": {
+    "dependency-check": "^3.1.0"
+  },
+  "gitHead": "54025e88c20a22803fc196ba7f50e74f5c90cd57"
+}

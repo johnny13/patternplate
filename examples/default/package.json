@@ -1,10 +1,13 @@
 {
-  "name": "@patternplate-example/default",
-  "version": "2.0.0-93",
+  "name": "@patternplate/example-default",
+  "version": "3.2.7",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "patternplate"
+    "start": "patternplate",
+    "pp:build": "patternplate build --out .tmp --base '/'",
+    "pp:test": "patternplate-test --project . --no-build --port=1438",
+    "pp:deploy": "patternplate-deploy --source .tmp --name=\"patternplate-example-default\" --provider=surge"
   },
   "author": {
     "name": "Mario Nebl",
@@ -16,7 +19,8 @@
   },
   "xo": false,
   "devDependencies": {
-    "@patternplate/cli": "^2.0.0-93",
-    "@patternplate/render-default": "^2.0.0-93"
+    "@patternplate/cli": "^3.2.7",
+    "@patternplate/render-default": "^3.2.5",
+    "dependency-check": "^3.1.0"
   }
 }

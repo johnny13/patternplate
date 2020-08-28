@@ -1,0 +1,41 @@
+{
+  "name": "@patternplate/screenshot",
+  "version": "3.2.5",
+  "description": "Create SVG screenshots from websites",
+  "bin": {
+    "patternplate-screenshot": "./cli.js"
+  },
+  "files": [
+    "cli.js",
+    "plugins.js"
+  ],
+  "scripts": {
+    "deps": "dependency-check . --missing && dependency-check . --extra --no-dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patternplate/patternplate.git"
+  },
+  "author": {
+    "name": "Mario Nebl",
+    "email": "mario.nebl@sinnerschrader.com"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "xo": false,
+  "dependencies": {
+    "execa": "^0.10.0",
+    "lodash": "^4.17.11",
+    "node-static": "^0.7.11",
+    "puppeteer": "^1.2.0",
+    "svgo": "^1.2.0",
+    "tempy": "^0.2.1",
+    "xmldom": "^0.1.27",
+    "yargs-parser": "^9.0.2"
+  },
+  "devDependencies": {
+    "dependency-check": "^3.1.0"
+  }
+}

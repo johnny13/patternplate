@@ -1,11 +1,15 @@
 {
-  "name": "@examples/styled-components",
-  "version": "2.0.0-93",
+  "name": "@patternplate/example-styled-components",
+  "version": "3.2.7",
   "private": true,
   "license": "MIT",
   "scripts": {
     "start": "concurrently \"yarn babel -w\" \"patternplate\"",
-    "babel": "babel src -d lib -s -D"
+    "babel": "babel src -d lib -s -D",
+    "build": "babel src -d lib -s -D",
+    "pp:build": "patternplate build --out .tmp --base '/'",
+    "pp:test": "patternplate-test --project . --no-build --port=1441",
+    "pp:deploy": "patternplate-deploy --source .tmp --name=\"patternplate-example-styled-components\" --provider=surge"
   },
   "author": {
     "name": "Mario Nebl",
@@ -23,16 +27,17 @@
   },
   "xo": false,
   "dependencies": {
-    "@patternplate/render-styled-components": "^2.0.0-93",
-    "react": "^16.2.0",
-    "styled-components": "^3.1.6"
+    "@patternplate/render-styled-components": "^3.2.5",
+    "react": "16.6.3",
+    "styled-components": "^4.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.40",
-    "@babel/core": "^7.0.0-beta.40",
-    "@babel/preset-env": "^7.0.0-beta.40",
-    "@babel/preset-react": "^7.0.0-beta.40",
-    "@patternplate/cli": "^2.0.0-93",
-    "concurrently": "^3.5.1"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0",
+    "@patternplate/cli": "^3.2.7",
+    "concurrently": "^3.5.1",
+    "dependency-check": "^3.1.0"
   }
 }

@@ -1,6 +1,10 @@
 #!/usr/bin/env node
+const path = require("path");
 const chalk = require("chalk");
 const meow = require("meow");
+const yargsParser = require("yargs-parser");
+const { loadConfig } = require("@patternplate/load-config");
+const { validate } = require("@patternplate/validate-config");
 
 const cli = meow(
   `
@@ -43,21 +47,44 @@ const cli = meow(
 );
 
 async function main({ input, flags, pkg }) {
+  const execFlags = yargsParser(process.execArgv);
   const [command] = input;
 
+  if (command !== "help") {
+    const { config, filepath } = await loadConfig({
+      cwd: flags.cwd || process.cwd()
+    });
+
+    if (filepath) {
+      const relativePath = path.relative(process.cwd(), filepath);
+      const userPath = relativePath.length < filepath.length ? relativePath : filepath;
+      const [error, valid] = validate({ target: config, name: filepath });
+
+      if (!valid && error) {
+        if (typeof error.format === "function") {
+          console.log(`\nInvalid config at ${chalk.bold(userPath)}:`);
+          console.error(error.format());
+        } else {
+          console.error(error);
+        }
+        return process.exit(1);
+      }
+    }
+  }
+
   switch (command) {
-    case 'help':
+    case "help":
       return cli.showHelp(0);
-    case 'build':
+    case "build":
       const build = require("./build");
-      return build({input, flags});
-    case 'create':
+      return build({ flags });
+    case "create":
       const create = require("./create");
-      return create({input, flags, pkg});
-    case 'start':
+      return create({ flags, pkg });
+    case "start":
     case undefined:
       const start = require("./start");
-      return start({input, flags});
+      return start({ flags, execFlags });
     default: {
       throw error(`Unknown command "${command}"`);
     }
@@ -71,7 +98,7 @@ function error(message) {
 }
 
 main(cli).catch(err => {
-  if (err.patternplate) {
+  if (err && err.patternplate) {
     console.log(cli.help);
     console.error(chalk.red(err.message));
     process.exit(1);
@@ -84,4 +111,3 @@ main(cli).catch(err => {
 process.on("unhandledRejection", reason => {
   throw reason;
 });
-

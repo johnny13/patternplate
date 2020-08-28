@@ -1,7 +1,14 @@
 {
   "name": "@patternplate/widgets",
-  "version": "2.0.0-93",
+  "version": "3.2.7",
+  "main": "lib/index.js",
   "description": "Markdown widgets available in patternplate",
+  "scripts": {
+    "deps": "dependency-check . --missing && dependency-check . --extra --no-dev"
+  },
+  "files": [
+    "index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/patternplate/patternplate.git"
@@ -20,6 +27,11 @@
   },
   "xo": false,
   "dependencies": {
-    "@patternplate/components": "^2.0.0-93"
-  }
+    "@patternplate/widget-demo": "^3.2.7",
+    "@patternplate/widget-list": "^3.2.7"
+  },
+  "devDependencies": {
+    "dependency-check": "^3.1.0"
+  },
+  "gitHead": "54025e88c20a22803fc196ba7f50e74f5c90cd57"
 }

@@ -4,7 +4,7 @@ description: "Learn how to build components in patternplate"
 tags: 
  - Guide
 options:
-  order: 1
+  order: 3
 ---
 
 # Build your first component in patternplate
@@ -13,8 +13,11 @@ options:
 
 ## What to expect
 
-Components are, well components - but also the bread of butter of every 
-component library. Let's learn about the default way to add components to `patternplate`.
+In `patternplate` production-grade components form the backbone of your design system. 
+This means there will be coding and cooperation between design and engineering involved
+while working in `patternplate`.
+
+Don't worry, we will walk you through the entire process.
 
 We will …
 
@@ -24,12 +27,12 @@ We will …
 
 ## You'll need
 
-* :white_check_mark: You are all set if you followed along [Guide: Getting Started](./doc/docs/guides/add-component?guides-enabled=true)
+* :white_check_mark: You are all set if you followed along [Guide: Getting Started](./getting-started?guides-enabled=true)
 
 ---
 
 * :writing_hand: Text editor
-* :file_folder: patternplate project ([Getting Started Guide](./doc/docs/guides/getting-started?guides-enabled=true))
+* :file_folder: patternplate project ([Getting Started Guide](./getting-started?guides-enabled=true))
 
 ## Create a new pattern
 
@@ -87,7 +90,7 @@ automatically and add **Button** to the components list.
 5. Click on the **Button** item to display its (still blank) demo canvas.
    Replace the contents of `lib/button/demo.js` with the code below:
 
-   ```js
+   ```js{2}
    module.exports = {
      html: () => '<button class="my-button">My first button</button>',
      default: () => {
@@ -98,7 +101,7 @@ automatically and add **Button** to the components list.
   
   > :information_source: You might think: HTML in JavaScript. What is this, sorcery? 
   > Don't worry, you can place your HTML in distinct files (demo.html) just fine, too.
-  > The same goes for your CSS (demo.css). See [Demos](./doc/docs/reference/demos?guides-enabled=true&reference-enabled=true#multi-file-demos) for details.
+  > The same goes for your CSS (demo.css). See [Demos](../reference/demos?guides-enabled=true&reference-enabled=true#multi-file-demos) for details.
 
    Saving the file signals the **Button** demo to reload automatically and display the `HTML` you just added.
 
@@ -107,7 +110,7 @@ automatically and add **Button** to the components list.
 6. Let's throw some `CSS` into the mix.
    Replace the contents of `lib/button/demo.js` with the code below:
 
-   ```js
+   ```js{4-10}
    module.exports = {
      html: () => '<button class="my-button">My first button</button>',
      css: () => `
@@ -134,7 +137,7 @@ Let's count up when clicking on **Button**.
    Replace the contents of `lib/button/demo.js` with the code below:
 
 
-   ```js
+   ```js{13-18}
    module.exports = {
      html: () => '<button class="my-button">My first button</button>',
      css: () => `
@@ -168,14 +171,14 @@ Let's count up when clicking on **Button**.
 * `demo.js` provides `HTML`, `CSS` and JavaScript via the `html`, `css` and `default` exports 
 
   > :information_source: Traditional multi file components work, too. 
-  > See [Demos](./doc/docs/reference/demos?guides-enabled=true&reference-enabled=true#multi-file-demos) for details.
+  > See [Demos](../reference/demos?guides-enabled=true&reference-enabled=true#multi-file-demos) for details.
 
 * Changes on source files cause demos to reload automatically
 
 ## Up next
 
-* [Guide: Write documentation](./doc/docs/guides/write-documentation?guides-enabled=true)
+* [Guide: Write documentation](./write-documentation?guides-enabled=true)
 
 ## Related topics
 
-* [Demos](./doc/docs/reference/demos?reference-enabled=true)
+* [Demos](../reference/demos?reference-enabled=true)

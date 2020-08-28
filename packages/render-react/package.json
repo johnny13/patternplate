@@ -1,8 +1,15 @@
 {
   "name": "@patternplate/render-react",
-  "version": "2.0.0-93",
+  "version": "3.2.5",
   "description": "patternplate render package for React",
   "xo": false,
+  "scripts": {
+    "deps": "dependency-check . render.js mount.js --missing && dependency-check . render.js mount.js --extra --no-dev"
+  },
+  "files": [
+    "mount.js",
+    "render.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/patternplate/patternplate.git"
@@ -20,9 +27,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@patternplate/render-default": "^2.0.0-93",
-    "lodash": "^4.17.5",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
-  }
+    "@patternplate/render-default": "^3.2.5",
+    "lodash": "^4.17.11",
+    "react": "16.6.3",
+    "react-dom": "16.6.3"
+  },
+  "devDependencies": {
+    "dependency-check": "^3.1.0"
+  },
+  "gitHead": "54025e88c20a22803fc196ba7f50e74f5c90cd57"
 }

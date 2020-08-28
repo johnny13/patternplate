@@ -1,10 +1,14 @@
 {
-  "name": "@patternplate-example/react-typescript",
-  "version": "2.0.0-93",
+  "name": "@patternplate/example-react-typescript",
+  "version": "3.2.7",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"cpx 'src/**/*.css' lib -w\" \"patternplate\""
+    "start": "concurrently \"tsc -w\" \"cpx 'src/**/*.css' lib -w\" \"patternplate\"",
+    "build": "concurrently \"tsc\" \"cpx 'src/**/*.css' lib\"",
+    "pp:build": "patternplate build --out .tmp --base '/'",
+    "pp:test": "patternplate-test --project . --no-build --port=1440",
+    "pp:deploy": "patternplate-deploy --source .tmp --name=\"patternplate-example-react-typescript\" --provider=surge"
   },
   "author": {
     "name": "Mario Nebl",
@@ -16,16 +20,16 @@
   },
   "xo": false,
   "devDependencies": {
-    "@patternplate/cli": "^2.0.0-93",
-    "@patternplate/render-react": "^2.0.0-93",
+    "@patternplate/cli": "^3.2.7",
+    "@patternplate/render-react": "^3.2.5",
     "concurrently": "^3.5.1",
     "cpx": "^1.5.0",
-    "typescript": "^2.7.2"
+    "dependency-check": "^3.1.0",
+    "typescript": "^3.1"
   },
   "dependencies": {
     "@types/classnames": "^2.2.3",
-    "@types/react": "^16.0.40",
     "classnames": "^2.2.5",
-    "react": "^16.2.0"
+    "react": "16.6.3"
   }
 }

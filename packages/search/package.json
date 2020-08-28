@@ -1,13 +1,16 @@
 {
   "name": "@patternplate/search",
-  "version": "2.0.0-93",
+  "version": "3.2.0",
   "description": "Perform search queries on a list of patternplate items",
   "scripts": {
-    "start": "yarn build -w",
-    "build": "babel -D src -d lib --source-maps --ignore **/*.test.js",
     "clean": "rimraf lib",
-    "watch": "yarn build -w"
+    "test": "jest",
+    "deps": "dependency-check . --missing && dependency-check . --extra --no-dev"
   },
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "xo": false,
   "repository": {
     "type": "git",
@@ -26,20 +29,19 @@
     "access": "public"
   },
   "dependencies": {
+    "@patternplate/types": "^3.1.1",
+    "@types/lodash": "^4.14.116",
+    "@types/semver": "^5.5.0",
     "fuse.js": "^3.2.0",
-    "lodash.flatten": "^4.4.0",
-    "lodash.intersection": "^4.4.0",
+    "lodash": "^4.17.11",
     "logic-query-parser": "^0.0.5",
+    "matcher": "^1.1.1",
     "semver": "^5.5.0"
   },
-  "babel": {
-    "presets": [
-      "module:@patternplate/babel-preset"
-    ]
-  },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.40",
-    "@patternplate/babel-preset": "^2.0.0-93",
-    "fixturez": "^1.1.0"
-  }
+    "dependency-check": "^3.1.0",
+    "fixturez": "^1.1.0",
+    "rimraf": "^2.6.2"
+  },
+  "gitHead": "54025e88c20a22803fc196ba7f50e74f5c90cd57"
 }

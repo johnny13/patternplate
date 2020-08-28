@@ -22,24 +22,17 @@ const FIELDS = [
   }, */
   {
     type: "field",
-    key: "flag",
-    value: "flag",
-    description: "being flagged as [value]",
+    key: "version",
+    value: "version",
+    description: "having version of [value]",
     operators: ["=", "!=", ">", ">=", "<", "<=", "^=", "~="]
   },
   {
     type: "field",
-    key: "is",
-    value: "is",
-    description: "being of type [value]",
-    operators: ["=", "!="]
-  },
-  {
-    type: "field",
-    key: "has",
-    value: "has",
-    description: "having data of [value]",
-    operators: ["=", "!="]
+    key: "flag",
+    value: "flag",
+    description: "being flagged as [value]",
+    operators: ["=", "!=", ">", ">=", "<", "<=", "^=", "~="]
   },
   /* {
     type: "field",
@@ -57,11 +50,25 @@ const FIELDS = [
   },
   {
     type: "field",
-    key: "version",
-    value: "version",
-    description: "having version of [value]",
-    operators: ["=", "!=", ">", ">=", "<", "<=", "^=", "~="]
-  }
+    key: "path",
+    value: "path",
+    description: "saved at [value] relative to patternplate.config.js",
+    operators: ["=", "*="]
+  },
+  {
+    type: "field",
+    key: "is",
+    value: "is",
+    description: "being of type [value]",
+    operators: ["=", "!="]
+  },
+  {
+    type: "field",
+    key: "has",
+    value: "has",
+    description: "having data of [value]",
+    operators: ["=", "!="]
+  },
 ];
 
 const OPERATORS = [
@@ -104,6 +111,11 @@ const OPERATORS = [
     type: "op",
     key: "~=",
     description: "contains"
+  },
+  {
+    type: "op",
+    key: "*=",
+    description: "matches"
   }
 ];
 

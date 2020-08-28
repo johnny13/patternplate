@@ -1,0 +1,26 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {"path": "./api"},
+    {"path": "./box"},
+    {"path": "./cli"},
+    {"path": "./client"},
+    {"path": "./compiler"},
+    {"path": "./load-config"},
+    {"path": "./load-doc"},
+    {"path": "./load-docs"},
+    {"path": "./load-manifest"},
+    {"path": "./load-meta"},
+    {"path": "./search"},
+    {"path": "./types"},
+    {"path": "./validate-config"},
+    {"path": "./validate-manifest"},
+    {"path": "./webpack-entry"},
+    {"path": "./websocket-client"},
+    {"path": "./widgets"}
+  ],
+  "compilerOptions": {
+    "composite": true
+  }
+}

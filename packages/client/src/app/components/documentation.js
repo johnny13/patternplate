@@ -24,7 +24,6 @@ export default class Documentation extends React.Component {
         <Markdown
           linkable
           source={props.doc}
-          widgets={props.widgets}
           />
       </StyledDocumentation>
     );
@@ -36,5 +35,8 @@ const StyledDocumentation = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: 860px;
-  padding: 60px;
+  padding: 80px 15px 15px 15px;
+  @media screen and (min-width: 720px) {
+    padding: 60px;
+  }
 `;

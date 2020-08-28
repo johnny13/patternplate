@@ -5,7 +5,7 @@ tags:
  - Guide
  - Expert
 options:
-  order: 5
+  order: 6
 ---
 
 # Show, don't tell – with widgets
@@ -24,11 +24,11 @@ We will …
 
 ## You'll need
 
-* :white_check_mark: You are all set if you followed along [Guide: Build a component](./doc/docs/guides/add-component?guides-enabled=true)
+* :white_check_mark: You are all set if you followed along [Guide: Build a component](./add-component?guides-enabled=true)
 ---
 
 * :writing_hand: Text editor
-* :file_folder: patternplate project ([Getting Started Guide](./doc/docs/guides/getting-started?guides-enabled=true))
+* :file_folder: patternplate project ([Getting Started Guide](./getting-started?guides-enabled=true))
 
 ## Before you start
 
@@ -78,7 +78,7 @@ you do that!
 
 1. Copy your new code block again and replace its language with `widget`.
 
-  ````md
+  ````md{14}
   ## My first code block
   ```js
   const React = require("react");
@@ -116,7 +116,7 @@ you do that!
 
 2. Change the `query` prop of `ComponentList` to `"is=pattern"`
 
-  ````md
+  ````md{8}
   ## My first widget
   ```widget
   const React = require("react");
@@ -140,7 +140,7 @@ you do that!
 1. Create a second widget block in `./README.md` by adding this code at the end of the file:
 
   ````md
-    ## My second widget
+  ## My second widget
   ```widget
   const React = require("react");
   const {ComponentDemo} = require("@patternplate/widgets");
@@ -168,11 +168,11 @@ you do that!
 
 ## Up next
 
-* [Guide: Convince with a cover](./doc/docs/guides/cover?guides-enabled=true)
+* [Guide: Convince with a cover](./cover?guides-enabled=true)
 
 
 ## Related topics
 
-* [Documentation](./doc/docs/reference/documentation?reference-enabled=true)
-* [Search](./doc/docs/reference/search?reference-enabled=true)
-* [Widgets](./doc/docs/reference/widgets?reference-enabled=true)
+* [Documentation](../reference/documentation?reference-enabled=true)
+* [Search](../reference/search?reference-enabled=true)
+* [Widgets](../reference/widgets?reference-enabled=true)

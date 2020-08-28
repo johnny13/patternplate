@@ -35,7 +35,8 @@ We will …
 
 ## Set up Babel
 
-> :information_source: We are using Babel here as an example, mainly because it is
+> :information_source: 
+> We are using Babel here as an example, mainly because it is
 the ubiquitous in the JavaScript ecosystem at the time of writing. 
 >
 > The principles described below apply to any build system emitting JavaScript (optionally HTML and CSS).
@@ -211,9 +212,9 @@ the ubiquitous in the JavaScript ecosystem at the time of writing.
     },
     "license": "MIT",
     "devDependencies": {
-      "@babel/cli": "^7.0.0-beta.42",
-      "@babel/core": "^7.0.0-beta.42",
-      "@babel/preset-env": "^7.0.0-beta.42"
+      "@babel/cli": "^7",
+      "@babel/core": "^7",
+      "@babel/preset-env": "^7"
     }
   }
   ```
@@ -242,7 +243,7 @@ the ubiquitous in the JavaScript ecosystem at the time of writing.
   yarn babel -w
   ```
 
-4. Access your button component at [localhost:1337/pattern/button](http://localhost:1337/pattern/button).
+4. Access your button component at `http://localhost:1337/pattern/button`.
    If you used `patternplate` before this should be familiar:
 
   ![](https://patternplate.github.io/media/images/screenshot-build.svg)
@@ -278,11 +279,11 @@ the ubiquitous in the JavaScript ecosystem at the time of writing.
 
 * `patternplate` works with all build systems that can emit JavaScript. 
 
-* Configure you build to produce artifacts in `lib` to pick them up with patternplate by default
+* Configure your build to produce artifacts in `lib` and to pick them up with patternplate by default
 
 * The `patternplate` development watcher works with the results of e.g. the Babel watch mode.
 
 ## Related topics
 
-* [CLI](./doc/docs/reference/cli?reference-enabled=true)
+* [CLI](../reference/cli?reference-enabled=true)
 

@@ -2,10 +2,10 @@ const path = require("path");
 const url = require("url");
 const eject = require("@patternplate/client/eject");
 const render = require("@patternplate/client/render");
-const compiler = require("@patternplate/compiler");
-const loadConfig = require("@patternplate/load-config");
+const { compiler } = require("@patternplate/compiler");
+const { loadConfig } = require("@patternplate/load-config");
 const { loadDocsTree } = require("@patternplate/load-docs");
-const loadMeta = require("@patternplate/load-meta");
+const { loadMeta } = require("@patternplate/load-meta");
 const ora = require("ora");
 const sander = require("@marionebl/sander");
 const fromString = require("require-from-string");
@@ -39,10 +39,11 @@ async function build({flags}) {
   const spinner = ora(`Building to "${upath}"`).start();
 
   const { config, filepath } = await loadConfig({ cwd });
+  const configCwd = filepath ? path.dirname(filepath) : cwd;
   const { entry = [], cover } = config;
 
   const docs = await loadDocsTree({
-    cwd,
+    cwd: configCwd,
     docs: config.docs,
     readme: config.readme
   });
@@ -59,7 +60,7 @@ async function build({flags}) {
   }
 
   const schema = { docs, meta: tree };
-  const state = { base, config, schema, isStatic: true};
+  const state = { base, config, schema, isStatic: true, scripts: flags.scripts !== false };
 
   // Create api/state.json
   await sander.writeFile(out, 'api/state.json', JSON.stringify(schema));
@@ -69,50 +70,58 @@ async function build({flags}) {
 
   await Promise.all(pool.map(async item => {
     const full = `${base}${item.contentType}/${item.id}`;
-    const html = await render(full, state);
-    const target = path.join(out, item.contentType, item.id, 'index.html');
-    await sander.writeFile(target, html);
+    const rendering = await render(full, state);
+    const target = path.join(out, item.contentType, `${item.id}.html`);
+    await sander.writeFile(target, rendering.contents);
   }));
 
   // Create required client js bundles
   await dump(eject(), "/static", out);
 
   // Create component bundles
-  await dump(await bundle({ cwd, target: "web" }), "/", path.join(out, 'api'));
+  await dump(await bundle({ cwd, config, target: "web" }), "/", path.join(out, 'api'));
 
-  const bundleFs = await bundle({ cwd, target: "node" });
+  const bundleFs = await bundle({ cwd, config, target: "node" });
   const getModule = fromFs(bundleFs);
   const bundles = getModule(BUNDLE_PATH);
 
   // Create /
   if (typeof cover === "string") {
     const cover = getModule(COVER_PATH);
-    const result = typeof cover.render === "function"
-      ? cover.render(cover)
-      : getModule(RENDER_PATH)(cover);
-    await sander.writeFile(out, 'index.html', coverHtml(result, {base}));
+    const context = getCoverContext(config);
+    const renderCover = typeof cover.render === "function"
+      ? cover.render
+      : getModule(RENDER_PATH);
+    const content = await Promise.resolve(renderCover(cover, context));
+    await sander.writeFile(out, 'index.html', coverHtml(content, {base}));
   } else {
     const home = await render(base, state);
-    await sander.writeFile(out, 'index.html', home);
+    await sander.writeFile(out, 'index.html', home.contents);
   }
 
   // Create demo.html files
   await Promise.all(patterns.map(async pattern => {
     const component = getComponent(bundles, pattern);
-    const result = typeof component.render === "function"
-      ? component.render(component)
-      : getModule(RENDER_PATH)(component);
-    await sander.writeFile(out, 'api/demo', `${pattern.id}.html`, demo(result, pattern));
+    const context = getPatternContext(pattern);
+    const renderComponent = typeof component.render === "function"
+      ? component.render
+      : getModule(RENDER_PATH);
+    const content = await Promise.resolve(renderComponent(component, context));
+
+    const depth = pattern.id.split('/').length;
+    await sander.writeFile(out, 'api/demo', `${pattern.id}.html`, demo(content, pattern, { depth }));
   }));
 
   // Copy /static/
-  if (await sander.exists(filepath || cwd, "static")) {
-    await sander.copydir(filepath || cwd, "static").to(out, "api/static");
+  if (await sander.exists(configCwd, "static")) {
+    await sander.copydir(configCwd, "static").to(out, "api/static");
   }
   spinner.succeed(`Built to "${upath}"`);
 }
 
 function selectBase(base) {
+  base = base.split(/["']/g).join("");
+
   if (base === "/" || base === "") {
     return base;
   }
@@ -126,8 +135,8 @@ function selectBase(base) {
   .join('');
 }
 
-function bundle({ cwd, target }) {
-  return compiler({ cwd, target })
+function bundle({ cwd: configCwd, config, target }) {
+  return compiler({ cwd: configCwd, config, target })
     .then(c => {
       return new Promise((resolve, reject) => {
         c.run((err, stats) => {
@@ -146,10 +155,23 @@ function bundle({ cwd, target }) {
     });
 }
 
+function getPatternContext(pattern) {
+  return {
+    dirname: path.dirname(pattern.path)
+  };
+}
+
+function getCoverContext(config) {
+  return {
+    dirname: path.dirname(config.cover)
+  };
+}
+
 // TODO: Duplicate of function in @patternplate/api/demo.js,
 // move to own package
-function demo(content, payload) {
+function demo(content, payload, context) {
   const data = encodeURIComponent(JSON.stringify(payload));
+  const rel = '../'.repeat(context.depth);
 
   return unindent(`
     <!doctype html>
@@ -171,10 +193,10 @@ function demo(content, payload) {
         <!-- content.after -->
         ${content.after || ""}
         <!-- ../ -> /api/ -->
-        <script src="../patternplate.web.components.js"></script>
-        <script src="../patternplate.web.probe.js"></script>
-        <script src="../patternplate.web.mount.js"></script>
-        <script src="../patternplate.web.demo.js"></script>
+        <script src="${rel}patternplate.web.components.js"></script>
+        <script src="${rel}patternplate.web.probe.js"></script>
+        <script src="${rel}patternplate.web.mount.js"></script>
+        <script src="${rel}patternplate.web.demo.js"></script>
       </body>
     </html>
 `);
@@ -220,7 +242,7 @@ async function dump(fs, base, target) {
 function list(fs, base) {
   return fs.readdirSync(base)
     .reduce((acc, name) => {
-      const p = path.join(base, name);
+      const p = (path.posix || path).join(base, name);
       const stat = fs.statSync(p);
       if (stat.isFile()) {
         acc.push(p);
@@ -235,10 +257,12 @@ function list(fs, base) {
 // TODO: Duplicate of function in @patternplate/api/demo.js,
 // move to own package
 function getComponent(components, data) {
-  const top = components[data.artifact];
+  const fileId = data.artifact.split(path.sep).join('/');
+  const top = components[fileId];
 
-  if (top[data.source]) {
-    return top[data.source];
+  const moduleId = data.source.split(path.sep).join('/');
+  if (top[moduleId]) {
+    return top[moduleId];
   }
 
   return top;

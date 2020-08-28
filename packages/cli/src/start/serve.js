@@ -1,10 +1,11 @@
 const ARSON = require("arson");
-const http = require("http");
 const errorhandler = require("errorhandler");
 const express = require("express");
 const slash = require("express-slash");
+const importFrom = require("import-from");
 
 const client = require("@patternplate/client");
+const defaultCreateServer = require("./server");
 
 module.exports = patternplate;
 
@@ -12,12 +13,24 @@ async function patternplate(options) {
   const { port } = options;
 
   const app = express();
-  const server = http.createServer(app);
+
+  const createServer = typeof options.server === "string"
+    ? importFrom(options.cwd, options.server)
+    : defaultCreateServer;
+
+  if (typeof options.server === "string" && typeof createServer !== "string") {
+    const error = new Error(`${options.server} passed via --server must export a function`);
+    error.patternplate = true;
+    throw error;
+  }
+
+  const server = createServer(app);
 
   const clientMiddleware = await client({
     cwd: options.cwd,
     config: options.config,
-    server
+    server,
+    inspect: options.inspect
   });
 
   app
@@ -39,7 +52,11 @@ async function patternplate(options) {
   return {
     app,
     port,
-    subscribe: clientMiddleware.subscribe
+    subscribe: clientMiddleware.subscribe,
+    unsubscribe: () => {
+      clientMiddleware.unsubscribe();
+      server.close();
+    }
   };
 }
 

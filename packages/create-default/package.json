@@ -1,8 +1,14 @@
 {
   "name": "@patternplate/create-default",
-  "version": "2.0.0-93",
+  "version": "3.1.1",
   "description": "Create a default patternplate project via patternplate create",
   "xo": false,
+  "scripts": {
+    "deps": "dependency-check . --missing && dependency-check . --extra --no-dev"
+  },
+  "files": [
+    "index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/patternplate/patternplate.git"
@@ -18,5 +24,8 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "dependency-check": "^3.1.0"
   }
 }

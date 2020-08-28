@@ -5,9 +5,6 @@ import { bindActionCreators } from "redux";
 
 import * as actions from "../actions";
 
-import ConnectedComponentList from "./component-list-widget";
-import ConnectedComponentDemo from "./component-demo-widget";
-
 import Documentation from "../components/documentation";
 import selectItem from "../selectors/item";
 import {flat as selectPool} from "../selectors/pool";
@@ -97,13 +94,13 @@ const selectDisplayName = createSelector(
   selectDocItem,
   item => {
     if (!item) {
-      return 'patternpalte';
+      return 'patternplate';
     }
     return item.manifest.displayName;
   }
 );
 
-const selectType = createSelector(selectItem, match => {
+export const selectType = createSelector(selectItem, match => {
   if (match && match.contents) {
     return "doc";
   }
@@ -115,7 +112,7 @@ const selectType = createSelector(selectItem, match => {
 
 const selectThemes = createSelector(
   state => state.config.color,
-  color => themes(color)
+  color => themes.getThemes(color)
 );
 
 function mapState(state) {
@@ -124,12 +121,7 @@ function mapState(state) {
     doc: selectDoc(state),
     themes: selectThemes(state),
     type: selectType(state),
-    widgets: {
-      PatternList: ConnectedComponentList,
-      PatternDemo: ConnectedComponentDemo,
-      ComponentDemo: ConnectedComponentDemo,
-      ComponentList: ConnectedComponentList
-    }
+    isStatic: state.isStatic
   };
 }
 

@@ -2,14 +2,11 @@ import { connect } from "react-redux";
 import React from "react";
 import remark from "remark";
 import emoji from "remark-gemoji-to-emoji";
-
 import { Flag, Headline, Link, Markdown, styled, Tag, Text, ThemeProvider, themes } from "@patternplate/components";
 
 import * as item from "../../selectors/item";
 import Fullscreen from "../../containers/trigger-fullscreen";
 import ToggleOpacity from "../../containers/toggle-opacity";
-import ConnectedComponentList from "../../containers/component-list-widget";
-import ConnectedComponentDemo from "../../containers/component-demo-widget";
 
 const processor = remark().use(emoji);
 
@@ -24,7 +21,7 @@ function PatternSheet(props) {
               {props.name}
               <StyledVersion>@{props.version}</StyledVersion>
             </StyledName>
-            <ThemeProvider theme={themes().dark}>
+            <ThemeProvider theme={themes.getThemes().dark}>
               <StyledControlsArea orient="right">
                 <StyledControlsItem>
                   <ToggleOpacity />
@@ -59,12 +56,6 @@ function PatternSheet(props) {
               <Markdown
                 linkable={true}
                 source={props.doc}
-                widgets={{
-                  PatternList: ConnectedComponentList,
-                  PatternDemo: ConnectedComponentDemo,
-                  ComponentList: ConnectedComponentList,
-                  ComponentDemo: ConnectedComponentDemo
-                }}
               />
             </StyledMarkdownBox>
           }
@@ -118,18 +109,18 @@ function mapProps(state) {
 
 const TOOLBAR_HEIGHT = 60;
 
-const StyledName = styled(props => <Headline {...props} is="h1" order={1}/>)`
+const StyledName = styled(props => <Headline {...props} as="h1" order={1}/>)`
   margin: 0 0 10px 0;
 `;
 
-const StyledVersion = styled(props => <Headline {...props} is="small" order={3}/>)`
+const StyledVersion = styled(props => <Headline {...props} as="small" order={3}/>)`
   display: inline-block;
-  color: ${props => props.theme.dark};
+  color: ${props => props.theme.colors.color};
   margin: 0;
 `;
 
 const StyledDescription = styled(Text)`
-  color: ${props => props.theme.recess};
+  color: ${props => props.theme.colors.recess};
   margin-bottom: 20px;
 `;
 
@@ -141,8 +132,8 @@ const StyledPatternSheet = styled.div`
   min-height: 30vh;
   margin-top: 70vh;
   padding: 30px 60px;
-  border-top: 1px solid ${props => props.theme.border};
-  background: ${props => props.theme.background};
+  border-top: 1px solid ${props => props.theme.colors.border};
+  background: ${props => props.theme.colors.background};
 `;
 
 const ORIENTATION = props => {
@@ -152,7 +143,7 @@ const ORIENTATION = props => {
 
 const StyledPatternSheetContainer = styled.div`
   margin: 0 auto;
-  max-width: 1240px;
+  max-width: 740px;
 `;
 
 const StyledControlsArea = styled.div`
@@ -180,7 +171,7 @@ const StyledTagList = styled.div`
   display: inline-block;
   margin-left: 10px;
   padding: 2px 10px;
-  border-left: 1px solid ${props => props.theme.border};
+  border-left: 1px solid ${props => props.theme.colors.border};
 `;
 
 const StyledBoxLine = styled.div`

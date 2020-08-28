@@ -6,15 +6,22 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "build": "lerna run build --stream --include-filtered-dependencies",
-    "clean": "npx lerna clean --yes && npx lerna run clean && npx rimraf node_modules",
-    "components:start": "yarn patternplate start",
-    "components:build": "yarn patternplate build --out .tmp --base '/'",
-    "components:serve": "yarn serve .tmp",
-    "components:deploy": "yarn patternplate-deploy --source .tmp --identity=./patternplate-deploy --target=git@github.com:patternplate/patternplate.github.io.git",
+    "build": "ttsc -b --verbose && lerna run build --stream --include-filtered-dependencies",
+    "pack": "lerna run pack --stream",
+    "clean": "lerna clean --yes && lerna run clean && rimraf node_modules",
+    "components:start": "patternplate start",
+    "components:build": "patternplate build --out .tmp --base '/'",
+    "components:test": "patternplate-test --project . --no-build --ignore=\"*/api/demo/doc/docs/*\"",
+    "components:serve": "serve .tmp",
+    "components:deploy": "patternplate-deploy --source .tmp --identity=./patternplate-deploy --target=git@github.com:patternplate/patternplate.github.io.git",
+    "examples:build": "yarn lerna run pp:build --private --scope=\"@patternplate/example-*\" --stream",
+    "examples:test": "yarn lerna run pp:test --private --scope=\"@patternplate/example-*\" --stream",
+    "examples:deploy": "yarn lerna run pp:deploy --private --scope=\"@patternplate/example-*\" --stream",
+    "patternplate:build": "lerna run build --stream --filter='@patternplate/components'",
+    "patternplate:watch": "lerna run watch --stream --filter='@patternplate/components'",
     "reinstall": "yarn clean && yarn && lerna bootstrap",
-    "start": "yarn lerna run watch --stream --parallel --include-filtered-dependencies",
-    "test": "yarn lerna run test --stream --parallel --include-filtered-dependencies"
+    "start": "ttsc -b --verbose && concurrently \"ttsc -b -w\" \"lerna run watch --stream --parallel --include-filtered-dependencies\"",
+    "test": "jest"
   },
   "author": {
     "name": "Mario Nebl",
@@ -24,83 +31,27 @@
     "type": "git",
     "url": "patternplate/patternplate"
   },
-  "xo": {
-    "esnext": true,
-    "extends": [
-      "prettier",
-      "xo-react"
-    ],
-    "plugins": [
-      "patternplate"
-    ],
-    "rules": {
-      "ava/no-ignored-test-files": [
-        0
-      ],
-      "ava/no-async-fn-without-await": [
-        0
-      ],
-      "capitalized-comments": [
-        0
-      ],
-      "import/prefer-default-export": [
-        0
-      ],
-      "import/order": [
-        0
-      ],
-      "func-names": [
-        0
-      ],
-      "no-return-await": [
-        0
-      ],
-      "react/forbid-component-props": [
-        0
-      ],
-      "react/jsx-indent": [
-        0
-      ],
-      "react/jsx-indent-props": [
-        0
-      ],
-      "react/jsx-sort-props": [
-        0
-      ],
-      "react/jsx-tag-spacing": [
-        0
-      ],
-      "react/prop-types": [
-        0
-      ],
-      "react/jsx-closing-bracket-location": [
-        0
-      ]
-    },
-    "ignores": [
-      "distribution/**/*",
-      "packages/**/application/**",
-      "packages/**/binary/**",
-      "packages/**/library/**",
-      "packages/**/lib/**",
-      "**/*.bundle.js"
-    ]
-  },
   "devDependencies": {
-    "@patternplate/deploy-site": "file:./packages/deploy",
-    "dom-to-image": "^2.6.0",
-    "eslint": "^4.9.0",
-    "eslint-config-prettier": "^2.4.0",
-    "eslint-config-xo-react": "^0.13.0",
-    "eslint-plugin-patternplate": "^1.0.1",
-    "eslint-plugin-react": "^7.3.0",
+    "@patternplate/deploy-site": "file:./tools/deploy-site",
+    "@patternplate/test-example": "file:./tools/test-example",
+    "@types/jest": "^24.0.11",
     "husky": "^0.14.3",
-    "lerna": "^2.8.0",
+    "jest": "^24.5.0",
+    "jest-cli": "^24.5.0",
+    "jest-haste-map": "^24.5.0",
+    "jest-resolve": "^24.5.0",
+    "lerna": "^3.13.1",
     "lint-staged": "^4.2.3",
     "prettier": "^1.6.1",
+    "react": "16.6.3",
+    "react-dom": "16.6.3",
     "rimraf": "^2.6.2",
-    "serve": "^6.5.2",
-    "xo": "^0.18.2",
+    "serve": "^10.1.2",
+    "styled-components": "4.1.1",
+    "ts-jest": "^24.0.0",
+    "ts-transform-json-schema": "^2.0.3",
+    "ttypescript": "^1.5.6",
+    "typescript": "^3.4.1",
     "yarn": "^1.3.2"
   },
   "engines": {
@@ -109,7 +60,30 @@
   },
   "workspaces": [
     "alias/*",
+    "cover",
+    "components/*",
+    "components/next-generation/*",
     "examples/*",
-    "packages/*"
-  ]
+    "packages/*",
+    "tools/*"
+  ],
+  "resolutions": {
+    "**/react": "16.6.3",
+    "**/react-dom": "16.6.3",
+    "**/deep-extend": ">=0.5.1",
+    "**/js-yaml": ">=3.13.0",
+    "**/atob": ">=2.1.0",
+    "**/debug": ">=2.1.0",
+    "**/sshpk": ">=1.14.1",
+    "**/lodash": ">=4.17.5",
+    "**/stringstream": ">=0.0.6",
+    "**/hoek": ">=5.0.3",
+    "**/clean-css": ">=4.1.11",
+    "**/fill-range/randomatic": ">=3.0.0",
+    "**/braces": ">=2.3.1",
+    "**/tar": ">=4.4.2",
+    "jest-cli/**/merge": ">=1.2.1",
+    "jest-cli/**/handlebars": ">=4.1.2",
+    "jest-cli/**/cryptiles": ">=4.1.2"
+  }
 }

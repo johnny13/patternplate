@@ -37,7 +37,9 @@ async function create({flags, pkg}) {
     throw error(`create: target "${flags.out}" already exists at "${rel}", aborting.`);
   }
 
-  const installer = (await Promise.all(INSTALLERS.map(i => commandExists(i)))).filter(Boolean)[0];
+  const installer = (await Promise.all(INSTALLERS.map(i => {
+    return commandExists(i).catch(() => null);
+  }))).filter(Boolean)[0];
 
   if (flags.install !== false) {
     if (!installer) {
@@ -107,7 +109,7 @@ async function dump(fs, base, target) {
 function list(fs, base) {
   return fs.readdirSync(base)
     .reduce((acc, name) => {
-      const p = path.join(base, name);
+      const p = (path.posix || path).join(base, name);
       const stat = fs.statSync(p);
       if (stat.isFile()) {
         acc.push(p);

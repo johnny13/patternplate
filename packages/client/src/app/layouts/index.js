@@ -4,6 +4,10 @@ import React from "react";
 import { renderToStaticMarkup as render } from "react-dom/server";
 import { styled, ServerStyleSheet } from "@patternplate/components";
 
+const DETONATOR = process.env.WEBPACK
+  ? require("raw-loader!./detonator")
+  : String(require("fs").readFileSync(require("path").resolve(__dirname, "detonator.js")));
+
 export default layout;
 
 function layout(props) {
@@ -26,35 +30,13 @@ function Layout(props) {
         {props.title && props.title.toComponent()}
         {props.meta && props.meta.toComponent()}
         {props.link && props.link.toComponent()}
+        <script dangerouslySetInnerHTML={{__html: DETONATOR}}/>
         {props.layoutCSS}
         {props.css}
       </head>
       <StyledBody data-base={props.base}>
-        <IconRegistry>{props.icons}</IconRegistry>
         <Content data-application-el="patternplate" content={props.html} />
         <State data-application-state="patternplate" data={props.data} />
-        <script dangerouslySetInnerHTML={{__html: `
-          if (supported() === false && window.location.search.indexOf("browser-warning=false") === -1) {
-            var el = document.querySelector("[data-browser-warning]");
-            el.style.display = "block";
-          }
-
-          if (supported() && window.location.search.indexOf("js-warning=false") === -1) {
-            window.addEventListener("error", function() {
-              var el = document.querySelector("[data-js-warning]");
-              el.style.display = "block";
-            });
-          }
-
-          function supported() {
-            try {
-              eval("async () => {}");
-              return true;
-            } catch (err) {
-              return false;
-            }
-          }
-        `}}/>
         {scripts.map(src => <script key={src} src={src} />)}
       </StyledBody>
     </StyledDocument>
@@ -70,14 +52,6 @@ const StyledBody = styled.body`
   margin: 0;
   height: 100%;
 `;
-
-function IconRegistry(props) {
-  return (
-    <div data-icon-registry style={{ display: "none" }}>
-      {props.children}
-    </div>
-  );
-}
 
 function Content(props) {
   return (
